@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script type="text/javascript">
+
+const awair_ip = "192.168.0.164"; // <- INPUT YOUR AWAIR IP ADDRESS HERE
+
+window.onload = function() {
+	var chart_co2;
+	var chart_voc;
+	var chart_pm;
+	var chart_temperature;
+	var chart_humidity;
+	var dataPoints = [];
+	var posx = 0;
+	
+	$.getJSON("http://"+awair_ip+"/air-data/latest", function(data) {
+		$.each(data, function(key, value){
+			if (dataPoints[key] === undefined) { dataPoints[key] = []; }
+			dataPoints[key].push({x: posx, y: parseInt(value)});
+		});
+		posx++;
+		
+		chart_co2 = new CanvasJS.Chart("chartContainer_co2",{
+			title:{ text:"CO2" },
+			legend: { horizontalAlign: "center", verticalAlign: "bottom" },
+			data: [	{ type: "line", showInLegend: true, legendText: "CO2", dataPoints : dataPoints.co2 },
+					{ type: "line", showInLegend: true, legendText: "CO2_est", dataPoints : dataPoints.co2_est }]
+		});
+		chart_voc = new CanvasJS.Chart("chartContainer_voc",{
+			title:{ text:"VOC" },
+			legend: { horizontalAlign: "center", verticalAlign: "bottom" },
+			data: [	{ type: "line", showInLegend: true, legendText: "VOC", dataPoints : dataPoints.voc },
+					{ type: "line", showInLegend: true, legendText: "H2_raw", dataPoints : dataPoints.voc_h2_raw },
+					{ type: "line", showInLegend: true, legendText: "Ethanol_raw", dataPoints : dataPoints.voc_ethanol_raw }]
+		});
+		chart_pm = new CanvasJS.Chart("chartContainer_pm",{
+			title:{ text:"PM" },
+			legend: { horizontalAlign: "center", verticalAlign: "bottom" },
+			data: [	{ type: "line", showInLegend: true, legendText: "PM2.5", dataPoints : dataPoints.pm25 },
+					{ type: "line", showInLegend: true, legendText: "PM10_est", dataPoints : dataPoints.pm10_est }]
+		});
+		chart_humidity = new CanvasJS.Chart("chartContainer_humidity",{
+			title:{ text:"Humidity" },
+			legend: { horizontalAlign: "center", verticalAlign: "bottom" },
+			legend: { horizontalAlign: "center", verticalAlign: "bottom" },
+			data: [	{ type: "line", showInLegend: true, legendText: "Humidity (%)", dataPoints : dataPoints.humid },
+					{ type: "line", showInLegend: true, legendText: "Absolute humidity (g/m³)", dataPoints : dataPoints.abs_humid }	]
+		});
+		chart_temperature = new CanvasJS.Chart("chartContainer_temperature",{
+			title:{ text:"Temperature" },
+			legend: { horizontalAlign: "center", verticalAlign: "bottom" },
+			data: [	{ type: "line", showInLegend: true, legendText: "Temperature", dataPoints : dataPoints.temp },
+					{ type: "line", showInLegend: true, legendText: "Dew point", dataPoints : dataPoints.dew_point }]
+		});
+		
+		updateChart();
+	});
+	
+	function updateChart() {
+	$.getJSON("http://"+awair_ip+"/air-data/latest", function(data) {
+		$.each(data, function(key, value){
+			if (dataPoints[key] === undefined) { dataPoints[key] = []; }
+			dataPoints[key].push({x: posx, y: parseInt(value)});
+		});
+		posx++;
+		chart_co2.render();
+		chart_voc.render();
+		chart_pm.render();
+		chart_temperature.render();
+		chart_humidity.render();
+		chart_co2.title.set("text", "CO2 level: " + parseInt(data.co2) + " ppm");
+		chart_voc.title.set("text", "VOC level: " + parseInt(data.voc) + " ppb");
+		chart_pm.title.set("text", "PM2.5 level: " + parseInt(data.pm25) + " ug/m³");
+		chart_humidity.title.set("text", "Humidity level: " + parseInt(data.humid) + "%");
+		chart_temperature.title.set("text", "Temperature level: " + parseInt(data.temp) + "°C");
+		setTimeout(function(){updateChart()}, 1000);
+	});
+	}
+}
+</script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</head>
+<body>
+<div id="chartContainer_co2" style="height: 300px; max-width: 920px; margin: 0px auto;"></div><br/>
+<div id="chartContainer_voc" style="height: 300px; max-width: 920px; margin: 0px auto;"></div><br/>
+<div id="chartContainer_pm" style="height: 300px; max-width: 920px; margin: 0px auto;"></div><br/>
+<div id="chartContainer_humidity" style="height: 300px; max-width: 920px; margin: 0px auto;"></div><br/>
+<div id="chartContainer_temperature" style="height: 300px; max-width: 920px; margin: 0px auto;"></div>
+</body>
+</html>
