@@ -69,11 +69,34 @@ window.onload = function() {
 		chart_pm.render();
 		chart_temperature.render();
 		chart_humidity.render();
+		
 		chart_co2.title.set("text", "CO2 level: " + parseInt(data.co2) + " ppm");
+		if (parseInt(data.co2) < 650) { chart_co2.set("backgroundColor", "#FFFFFF"); }
+		else if (parseInt(data.co2) < 800) { chart_co2.set("backgroundColor", "#ffcc00"); }
+		else if (parseInt(data.co2) < 1000) { chart_co2.set("backgroundColor", "#ff9966"); }
+		else { chart_co2.set("backgroundColor", "#cc3300"); }
+		
 		chart_voc.title.set("text", "VOC level: " + parseInt(data.voc) + " ppb");
+		if (parseInt(data.voc) < 350) { chart_voc.set("backgroundColor", "#FFFFFF"); }
+		else if (parseInt(data.voc) < 1000) { chart_voc.set("backgroundColor", "#ffcc00"); }
+		else if (parseInt(data.voc) < 2000) { chart_voc.set("backgroundColor", "#ff9966"); }
+		else { chart_voc.set("backgroundColor", "#cc3300"); }
+		
 		chart_pm.title.set("text", "PM2.5 level: " + parseInt(data.pm25) + " ug/m³");
+		if (parseInt(data.pm25) < 15) { chart_pm.set("backgroundColor", "#FFFFFF"); }
+		else if (parseInt(data.pm25) < 30) { chart_pm.set("backgroundColor", "#ffcc00"); }
+		else if (parseInt(data.pm25) < 50) { chart_pm.set("backgroundColor", "#ff9966"); }
+		else { chart_pm.set("backgroundColor", "#cc3300"); }
+		
 		chart_humidity.title.set("text", "Humidity level: " + parseInt(data.humid) + "%");
+		if (parseInt(data.humid) < 20) { chart_humidity.set("backgroundColor", "#cc3300"); }
+		else if (parseInt(data.humid) < 35) { chart_humidity.set("backgroundColor", "#ff9966"); }
+		else if (parseInt(data.humid) < 65) { chart_humidity.set("backgroundColor", "#FFFFFF"); }
+		else if (parseInt(data.humid) < 80) { chart_humidity.set("backgroundColor", "#ff9966"); }
+		else { chart_humidity.set("backgroundColor", "#cc3300"); }
+		
 		chart_temperature.title.set("text", "Temperature level: " + parseInt(data.temp) + "°C");
+		
 		setTimeout(function(){updateChart()}, 1000);
 	});
 	}
