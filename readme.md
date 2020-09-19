@@ -4,5 +4,5 @@ Be sure to enable the Local Sensors feature in the Developer Options, and to set
  
 Here is how it looks:
 
-![image](screenshot.png)
+![image](screenshot-dark.png)
  
