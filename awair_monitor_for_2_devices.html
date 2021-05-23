@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script type="text/javascript">
+
+// Don't forget to enable the Local API on your Awair before using this
+// https://support.getawair.com/hc/en-us/articles/360049221014-Awair-Local-API-Feature
+
+// BLUE
+const awair_ip_1 = "192.168.1.11"; // <- INPUT YOUR AWAIR IP ADDRESS HERE
+const awair_name_1 = "Kitchen"; // <- Input the label you want for this device
+
+// RED
+const awair_ip_2 = "192.168.1.12"; // <- INPUT YOUR AWAIR IP ADDRESS HERE
+const awair_name_2 = "Living"; // <- Input the label you want for this device
+
+
+window.onload = function() {
+	var chart_co2;
+	var chart_voc;
+	var chart_pm;
+	var chart_temperature;
+	var chart_humidity;
+	var dataPoints_1 = [];
+	var dataPoints_2 = [];
+	var posx = 0;
+	
+	$.getJSON("http://"+awair_ip_1+"/air-data/latest", function(data) {
+		$.each(data, function(key, value){
+			if (dataPoints_1[key] === undefined) { dataPoints_1[key] = []; }
+			dataPoints_1[key].push({x: posx, y: parseInt(value)});
+		});
+
+		$.getJSON("http://"+awair_ip_2+"/air-data/latest", function(data) {
+			$.each(data, function(key, value){
+				if (dataPoints_2[key] === undefined) { dataPoints_2[key] = []; }
+				dataPoints_2[key].push({x: posx, y: parseInt(value)});
+			});
+
+			posx++;
+			
+			chart_co2 = new CanvasJS.Chart("chartContainer_co2",{
+				title:{ text:"CO2", fontFamily: "helvetica", fontColor: "#F7FAFC", fontSize: 16, horizontalAlign: "left", padding: { left: 30 } },
+				axisX:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
+				axisY:{ minimum: 0, labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
+				legend: { fontColor: "#F7FAFC", horizontalAlign: "center", verticalAlign: "bottom" },
+				data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: awair_name_1, dataPoints : dataPoints_1.co2 },
+						{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: awair_name_2, dataPoints : dataPoints_2.co2 }]
+			});
+			chart_voc = new CanvasJS.Chart("chartContainer_voc",{
+				title:{ text:"VOC", fontFamily: "helvetica", fontColor: "#F7FAFC", fontSize: 16, horizontalAlign: "left", padding: { left: 30 } },
+				axisX:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
+				axisY:{ minimum: 0, labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
+				legend: { fontColor: "#F7FAFC", horizontalAlign: "center", verticalAlign: "bottom" },
+				data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: awair_name_1, dataPoints : dataPoints_1.voc },
+						{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: awair_name_2, dataPoints : dataPoints_2.voc }]
+			});
+			chart_pm = new CanvasJS.Chart("chartContainer_pm",{
+				title:{ text:"PM", fontFamily: "helvetica", fontColor: "#F7FAFC", fontSize: 16, horizontalAlign: "left", padding: { left: 30 } },
+				axisX:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
+				axisY:{ minimum: 0, labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
+				legend: { fontColor: "#F7FAFC", horizontalAlign: "center", verticalAlign: "bottom" },
+				data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: awair_name_1, dataPoints : dataPoints_1.pm25 },
+						{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: awair_name_2, dataPoints : dataPoints_2.pm25 }]
+			});
+			chart_humidity = new CanvasJS.Chart("chartContainer_humidity",{
+				title:{ text:"Humidity", fontFamily: "helvetica", fontColor: "#F7FAFC", fontSize: 16, horizontalAlign: "left", padding: { left: 30 } },
+				axisX:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
+				axisY:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
+				legend: { fontColor: "#F7FAFC", horizontalAlign: "center", verticalAlign: "bottom" },
+				data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: awair_name_1, dataPoints : dataPoints_1.humid },
+						{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: awair_name_2, dataPoints : dataPoints_2.humid }	]
+			});
+			chart_temperature = new CanvasJS.Chart("chartContainer_temperature",{
+				title:{ text:"Temperature", fontFamily: "helvetica", fontColor: "#F7FAFC", fontSize: 16, horizontalAlign: "left", padding: { left: 30 } },
+				axisX:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
+				axisY:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
+				legend: { fontColor: "#F7FAFC", horizontalAlign: "center", verticalAlign: "bottom" },
+				data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: awair_name_1, dataPoints : dataPoints_1.temp },
+						{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: awair_name_2, dataPoints : dataPoints_2.temp }]
+			});
+
+			chart_co2.set("backgroundColor", "#1A202C");
+			chart_voc.set("backgroundColor", "#1A202C");
+			chart_pm.set("backgroundColor", "#1A202C");
+			chart_humidity.set("backgroundColor", "#1A202C");
+			chart_temperature.set("backgroundColor", "#1A202C");
+
+			updateChart();
+		});
+	});
+	
+
+	function updateChart() {
+		$.getJSON("http://"+awair_ip_1+"/air-data/latest", function(data) {
+			$.each(data, function(key, value){
+				if (dataPoints_1[key] === undefined) { dataPoints_1[key] = []; }
+				if (key === "temp" || key === "humid") { dataPoints_1[key].push({x: posx, y: parseFloat(value)}); }
+				else { dataPoints_1[key].push({x: posx, y: parseInt(value)}); }
+			});
+
+			$.getJSON("http://"+awair_ip_2+"/air-data/latest", function(data) {
+				$.each(data, function(key, value){
+					if (dataPoints_2[key] === undefined) { dataPoints_2[key] = []; }
+					if (key === "temp" || key === "humid") { dataPoints_2[key].push({x: posx, y: parseFloat(value)}); }
+					else { dataPoints_2[key].push({x: posx, y: parseInt(value)}); }
+				});
+
+				posx++;
+				chart_co2.render();
+				chart_voc.render();
+				chart_pm.render();
+				chart_temperature.render();
+				chart_humidity.render();
+				
+				chart_co2.title.set("text", "CO2 level (ppm)");				
+				chart_voc.title.set("text", "VOC level (ppb)");
+				chart_pm.title.set("text", "PM2.5 level (ug/m³)");
+				chart_humidity.title.set("text", "Humidity level (%)");
+				chart_temperature.title.set("text", "Temperature level (°C)");
+
+				setTimeout(function(){updateChart()}, 1000);
+			});
+		});
+	}
+}
+</script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</head>
+<body style="background-color:#1A202C;">
+<div id="chartContainer_co2" style="height: 300px; max-width: 920px; margin: 0px auto; margin-bottom: 64px;"></div>
+<div id="chartContainer_voc" style="height: 300px; max-width: 920px; margin: 0px auto; margin-bottom: 64px;"></div>
+<div id="chartContainer_pm" style="height: 300px; max-width: 920px; margin: 0px auto; margin-bottom: 64px;"></div>
+<div id="chartContainer_humidity" style="height: 300px; max-width: 920px; margin: 0px auto; margin-bottom: 64px;"></div>
+<div id="chartContainer_temperature" style="height: 300px; max-width: 920px; margin: 0px auto; margin-bottom: 64px;"></div>
+</body>
+</html>
