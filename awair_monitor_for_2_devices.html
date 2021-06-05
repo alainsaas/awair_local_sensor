@@ -28,13 +28,15 @@ window.onload = function() {
 	$.getJSON("http://"+awair_ip_1+"/air-data/latest", function(data) {
 		$.each(data, function(key, value){
 			if (dataPoints_1[key] === undefined) { dataPoints_1[key] = []; }
-			dataPoints_1[key].push({x: posx, y: parseInt(value)});
+			if (key === "temp" || key === "humid") { dataPoints_1[key].push({x: posx, y: parseFloat(value)}); }
+			else { dataPoints_1[key].push({x: posx, y: parseInt(value)}); }
 		});
 
 		$.getJSON("http://"+awair_ip_2+"/air-data/latest", function(data) {
 			$.each(data, function(key, value){
 				if (dataPoints_2[key] === undefined) { dataPoints_2[key] = []; }
-				dataPoints_2[key].push({x: posx, y: parseInt(value)});
+				if (key === "temp" || key === "humid") { dataPoints_2[key].push({x: posx, y: parseFloat(value)}); }
+				else { dataPoints_2[key].push({x: posx, y: parseInt(value)}); }
 			});
 
 			posx++;
