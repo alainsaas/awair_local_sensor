@@ -8,6 +8,9 @@ Use
 
 Here is how it looks:
 
+1 device version:
 ![image](screenshot-dark.png)
+
+2 devices version:
 ![image](screenshot-dark-2-devices.png)
  
