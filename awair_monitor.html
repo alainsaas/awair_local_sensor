@@ -17,50 +17,51 @@ window.onload = function() {
 	$.getJSON("http://"+awair_ip+"/air-data/latest", function(data) {
 		$.each(data, function(key, value){
 			if (dataPoints[key] === undefined) { dataPoints[key] = []; }
-			dataPoints[key].push({x: posx, y: parseInt(value)});
+			if (key === "temp" || key === "humid") { dataPoints[key].push({x: posx, y: parseFloat(value)}); }
+				else { dataPoints[key].push({x: posx, y: parseInt(value)}); }
 		});
 		posx++;
 		
 		chart_co2 = new CanvasJS.Chart("chartContainer_co2",{
 			title:{ text:"CO2", fontFamily: "helvetica", fontColor: "#F7FAFC", fontSize: 16, horizontalAlign: "left", padding: { left: 30 } },
 			axisX:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
-			axisY:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
+			axisY:{ minimum: 0, labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
 			legend: { fontColor: "#F7FAFC", horizontalAlign: "center", verticalAlign: "bottom" },
-			data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: "CO2", dataPoints : dataPoints.co2 },
-					{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: "CO2_est", dataPoints : dataPoints.co2_est }]
+			data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: "CO2", dataPoints : dataPoints.co2 }/*,
+					{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: "CO2_est", dataPoints : dataPoints.co2_est }*/]
 		});
 		chart_voc = new CanvasJS.Chart("chartContainer_voc",{
 			title:{ text:"VOC", fontFamily: "helvetica", fontColor: "#F7FAFC", fontSize: 16, horizontalAlign: "left", padding: { left: 30 } },
 			axisX:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
-			axisY:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
+			axisY:{ minimum: 0, labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
 			legend: { fontColor: "#F7FAFC", horizontalAlign: "center", verticalAlign: "bottom" },
-			data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: "VOC", dataPoints : dataPoints.voc },
+			data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: "VOC", dataPoints : dataPoints.voc }/*,
 					{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: "H2_raw", dataPoints : dataPoints.voc_h2_raw },
-					{ type: "line", lineColor: "#16CEB9", showInLegend: true, legendText: "Ethanol_raw", dataPoints : dataPoints.voc_ethanol_raw }]
+					{ type: "line", lineColor: "#16CEB9", showInLegend: true, legendText: "Ethanol_raw", dataPoints : dataPoints.voc_ethanol_raw }*/]
 		});
 		chart_pm = new CanvasJS.Chart("chartContainer_pm",{
 			title:{ text:"PM", fontFamily: "helvetica", fontColor: "#F7FAFC", fontSize: 16, horizontalAlign: "left", padding: { left: 30 } },
 			axisX:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
-			axisY:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
+			axisY:{ minimum: 0, labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
 			legend: { fontColor: "#F7FAFC", horizontalAlign: "center", verticalAlign: "bottom" },
-			data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: "PM2.5", dataPoints : dataPoints.pm25 },
-					{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: "PM10_est", dataPoints : dataPoints.pm10_est }]
+			data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: "PM2.5", dataPoints : dataPoints.pm25 }/*,
+					{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: "PM10_est", dataPoints : dataPoints.pm10_est }*/]
 		});
 		chart_humidity = new CanvasJS.Chart("chartContainer_humidity",{
 			title:{ text:"Humidity", fontFamily: "helvetica", fontColor: "#F7FAFC", fontSize: 16, horizontalAlign: "left", padding: { left: 30 } },
 			axisX:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
 			axisY:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
 			legend: { fontColor: "#F7FAFC", horizontalAlign: "center", verticalAlign: "bottom" },
-			data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: "Humidity (%)", dataPoints : dataPoints.humid },
-					{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: "Absolute humidity (g/m³)", dataPoints : dataPoints.abs_humid }	]
+			data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: "Humidity (%)", dataPoints : dataPoints.humid }/*,
+					{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: "Absolute humidity (g/m³)", dataPoints : dataPoints.abs_humid }*/]
 		});
 		chart_temperature = new CanvasJS.Chart("chartContainer_temperature",{
 			title:{ text:"Temperature", fontFamily: "helvetica", fontColor: "#F7FAFC", fontSize: 16, horizontalAlign: "left", padding: { left: 30 } },
 			axisX:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
 			axisY:{ labelFontColor: "#F7FAFC", gridColor: "#2D3748", lineColor: "#2D3748", tickColor: "#2D3748" },
 			legend: { fontColor: "#F7FAFC", horizontalAlign: "center", verticalAlign: "bottom" },
-			data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: "Temperature", dataPoints : dataPoints.temp },
-					{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: "Dew point", dataPoints : dataPoints.dew_point }]
+			data: [	{ type: "line", lineColor: "#6648FF", showInLegend: true, legendText: "Temperature", dataPoints : dataPoints.temp }/*,
+					{ type: "line", lineColor: "#F7517F", showInLegend: true, legendText: "Dew point", dataPoints : dataPoints.dew_point }*/]
 		});
 		
 		updateChart();
@@ -70,7 +71,8 @@ window.onload = function() {
 	$.getJSON("http://"+awair_ip+"/air-data/latest", function(data) {
 		$.each(data, function(key, value){
 			if (dataPoints[key] === undefined) { dataPoints[key] = []; }
-			dataPoints[key].push({x: posx, y: parseInt(value)});
+			if (key === "temp" || key === "humid") { dataPoints[key].push({x: posx, y: parseFloat(value)}); }
+				else { dataPoints[key].push({x: posx, y: parseInt(value)}); }
 		});
 		posx++;
 		chart_co2.render();
